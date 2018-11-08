@@ -1,15 +1,17 @@
 #ifndef _CHECKARGS_H_
 #define _CHECKARGS_H_
+#include <stdlib.h>
 
 extern char *optarg;
 extern int optind, opterr, optopt;
+extern void clrscr();
 
 class checkArgs {
 private:
 	// 1) Modificar esta sección
 	const std::string optString = "s:p:d:h";
 	
-	const std::string opciones = "-s SERVER -p PORT -d DATA [-h]";
+	const std::string opciones = "-s SERVIDOR -p PUERTO -d DATA [-h]";
 
 	const std::string descripcion  = "Descripción:\n"
 		                             "\t-s   Nombre del servidor web\n"
@@ -91,7 +93,8 @@ checkArgs::args_t checkArgs::getArgs(){
 }
 
 void checkArgs::printUsage(){
-	printf("Uso: %s %s\n%s\n", argv[0], opciones.c_str(), descripcion.c_str());
+	system("clear");
+	printf("Metodo de uso: %s %s\n%s\n", argv[0], opciones.c_str(), descripcion.c_str());
 }
 
 
