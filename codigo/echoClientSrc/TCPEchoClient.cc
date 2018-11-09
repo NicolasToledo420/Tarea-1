@@ -77,8 +77,9 @@ int main(int argc, char *argv[]) {
 			
 		}
 		//std::cout << "\n\n\nTERMINÉ DE MOSTRAR";
-		archivo.close();
+		
 		std::cout << std::endl;
+		archivo.close();
 
 		// Destructor closes the socket
 
