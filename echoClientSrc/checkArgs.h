@@ -7,16 +7,20 @@ extern int optind, opterr, optopt;
 class checkArgs {
 private:
 	// 1) Modificar esta sección
-	const std::string optString = "p:h";
+	const std::string optString = "s:p:d:h";
 	
-	const std::string opciones = "-p PORT [-h]";
+	const std::string opciones = "-s SERVER -p PORT -d DATA [-h]";
 
 	const std::string descripcion  = "Descripción:\n"
-		                             "\t-p   Puerto del servidor web\n"
+		                             "\t-s   Nombre del servidor web\n"
+									 "\t-p   Puerto del servidor web\n"
+									 "\t-d   Datos a enviar\n"
 									 "\t-h   Muestra esta ayuda y termina\n";
 	
 	typedef struct args_t{
+		std::string SERVER;
 		uint16_t    PORT;
+		std::string DATA;
 	} args_t;
 	
 	// 2) Modificar constructor
@@ -37,12 +41,16 @@ public:
 	
 private:
 	void printUsage();
+	//char *encabezado= "GET /HTTP/1.1\n";
 	
 	
 };
 
 checkArgs::checkArgs(int _argc , char **_argv){
+	parametros.SERVER = "";
 	parametros.PORT   = 0;
+	parametros.DATA   = "";
+	//parametros.ARCH   = "";
 	
 	argc = _argc;
 	argv = _argv;
@@ -55,12 +63,20 @@ checkArgs::~checkArgs(){
 
 checkArgs::args_t checkArgs::getArgs(){
 	int opcion;
-	
 	while ((opcion = getopt (argc, argv, optString.c_str())) != -1){
 		switch (opcion) {
+			case 's':
+					parametros.SERVER = optarg;
+					break;
 			case 'p':
 					parametros.PORT = atoi(optarg);
 					break;
+			case 'd':
+					parametros.DATA = optarg;
+					break;
+			/*case 'o':
+					parametros.ARCH = optarg;
+					break;*/
 			case 'h':
 			default:
 					printUsage();
@@ -68,7 +84,9 @@ checkArgs::args_t checkArgs::getArgs(){
 		}
 	}
 
-	if ( parametros.PORT <= 0 ){
+	if ( parametros.SERVER == "" ||
+		 parametros.PORT <= 0 ||
+		 parametros.DATA == "" /*|| parametros.ARCH == ""*/){
 		printUsage();
 		exit(EXIT_FAILURE);
 	}
@@ -77,7 +95,8 @@ checkArgs::args_t checkArgs::getArgs(){
 }
 
 void checkArgs::printUsage(){
-	printf("Uso: %s %s\n%s\n", argv[0], opciones.c_str(), descripcion.c_str());
+	printf("\n\nEL METODO DE USO ES: %s %s\n%s\n", argv[0], opciones.c_str(), descripcion.c_str());
+	printf("\n\n\nEL PROGRAMA ESTA AUTOMATIZADO PARA QUE SE GENERE AUTOMATICAMENTE EL ARCHIVO DE TEXTO CON EL CODIGO HTML\n");
 }
 
 

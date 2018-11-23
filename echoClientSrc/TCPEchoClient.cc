@@ -24,7 +24,7 @@
 #include <fstream>
 using namespace std;
 
-const uint32_t RCVBUFSIZE = 1024;    // Size of receive buffer
+const uint32_t RCVBUFSIZE = 2048;    // Size of receive buffer
 
 int main(int argc, char *argv[]) {
 
@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
 	
 	servAddress   = argumentos->getArgs().SERVER;
 	echoServPort  = argumentos->getArgs().PORT;
-	echoString    = argumentos->getArgs().DATA;
+	//echoString    = argumentos->getArgs().DATA;
+	echoString = "GET / HTTP/1.1\r\nHost: "+servAddress+"\r\n\r\n";
 	
 	delete argumentos;
 	
@@ -51,22 +52,21 @@ int main(int argc, char *argv[]) {
 		// Send the string to the echo server
 		sock.send(echoString.c_str(), echoStringLen);
 
-		char echoBuffer[RCVBUFSIZE + 0];    // Buffer for echo string + \0
+		char echoBuffer[RCVBUFSIZE + 1];    // Buffer for echo string + \0
 		uint32_t bytesReceived = 0;              // Bytes read on each recv()
 		uint32_t totalBytesReceived = 0;         // Total bytes read
 
 		// Receive the same string back from the server
 		std::cout << "Received: ";               // Setup to print the echoed string
-		//printf("%d", echoStringLen);
-		while (totalBytesReceived < totalBytesReceived+1) {
+		
+		while (totalBytesReceived < 2048) {
 			// Receive up to the buffer size bytes from the sender
 			
 			if ((bytesReceived = (sock.recv(echoBuffer, RCVBUFSIZE))) <= 0) {
 				std::cerr << "\n\nUnable to read";
-				std::cerr << "\n\nTERMINO DE \n";
+				std::cerr << "\n\nTERMINO DE ESCRIBIR\n";
 				exit(EXIT_FAILURE);
-				/*fs << "hola" << endl;
-				fs.close();*/
+				
 				
 			}
 			archivo<<echoBuffer;			
@@ -76,7 +76,6 @@ int main(int argc, char *argv[]) {
 			
 			
 		}
-		//std::cout << "\n\n\nTERMINÉ DE MOSTRAR";
 		
 		std::cout << std::endl;
 		archivo.close();
